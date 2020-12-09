@@ -1,0 +1,25 @@
+{
+  "name": "CordovaAdvanceAILiveness",
+  "version": "1.0.0",
+  "description": "",
+  "cordova": {
+    "id": "CordovaAdvanceAILiveness",
+    "platforms": [
+      "android"
+    ]
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/CloudyIceRain/CordovaAdvanceAILiveness.git"
+  },
+  "keywords": [
+    "ecosystem:cordova",
+    "cordova-android"
+  ],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/CloudyIceRain/CordovaAdvanceAILiveness/issues"
+  },
+  "homepage": "https://github.com/CloudyIceRain/CordovaAdvanceAILiveness#readme"
+}
