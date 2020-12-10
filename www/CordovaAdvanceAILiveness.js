@@ -17,8 +17,8 @@ let CordovaAdvanceAILiveness = {
   },
 
   //调整动作顺序----按需修改检测动作顺序
-  setActionSequence(arg0, success, error){
-    exec(success, error, 'CordovaAdvanceAILiveness', 'setActionSequence', [arg0]);
+  setActionSequence(arg0, arg1, success, error){
+    exec(success, error, 'CordovaAdvanceAILiveness', 'setActionSequence', [arg0, arg1]);
   },
 
   //绑定用户ID
