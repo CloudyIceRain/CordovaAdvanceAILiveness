@@ -21,7 +21,7 @@ function run() {
   }
   var buildGradle = fs.readFileSync(BUILD_GRADLE_PATH).toString();
   let search_str = "dirs project(':CordovaAdvanceAILiveness:liveness').file('libs')";
-  let str = "repositories {    flatDir {        dirs project(':CordovaAdvanceAILiveness:liveness').file('libs')    }  }"
+  let str = "repositories {\n    flatDir {\n        dirs project(':CordovaAdvanceAILiveness:liveness').file('libs')\n    }\n}"
   if (buildGradle.indexOf(search_str) == -1){
     //没有这个字符串
     log("try add liveness to build gradle.");
