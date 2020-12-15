@@ -32,6 +32,16 @@ function run() {
   deferral.resolve();
 }
 
+function attempt(fn) {
+    return function () {
+        try {
+            fn.apply(this, arguments);
+        } catch (e) {
+            onFatalException(e);
+        }
+    }
+}
+
 module.exports = function (ctx) {
     try{
         deferral = require('q').defer();
