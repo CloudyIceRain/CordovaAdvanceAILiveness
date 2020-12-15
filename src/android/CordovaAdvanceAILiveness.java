@@ -6,7 +6,10 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.util.Log;
 
+import com.huofeng.kabayan.MainActivity;
+
 import org.apache.cordova.CallbackContext;
+import org.apache.cordova.CordovaActivity;
 import org.apache.cordova.CordovaArgs;
 import org.apache.cordova.CordovaPlugin;
 import org.json.JSONArray;
@@ -25,72 +28,105 @@ public class CordovaAdvanceAILiveness extends CordovaPlugin {
     //针对AdvanceAI 1.2.4版本的接入
     public static final int REQUEST_CODE_LIVENESS = 1422114;    //advan 1 4 22 1 14
     public static CallbackContext m_startLiveness_Callback = null;
+
+//    public static CordovaAdvanceAILiveness instance = null;
+//    public static CordovaAdvanceAILiveness getInstance(){
+//        if (null == instance) instance = new CordovaAdvanceAILiveness();
+//        return instance;
+//    }
     /**
      * 获取检测结果
      */
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
+        //super.onActivityResult(requestCode, resultCode, data);
+        Log.i("Advance", "onActivityResult requestCode="+requestCode);
         if (requestCode == REQUEST_CODE_LIVENESS) {
             Log.i("Advance", "onActivityResult REQUEST_CODE_LIVENESS");
-            if (LivenessResult.isSuccess()) {// 活体检测成功
-                String livenessId = LivenessResult.getLivenessId();// 本次活体id
-                String livenessBase64Str = LivenessResult.getLivenessBase64Str();// 本次活体图片
-                if (null != m_startLiveness_Callback){
+            try {
+                if (LivenessResult.isSuccess()) {// 活体检测成功
+                    String livenessId = LivenessResult.getLivenessId();// 本次活体id
+                    String livenessBase64Str = LivenessResult.getLivenessBase64Str();// 本次活体图片
+                    if (null != m_startLiveness_Callback) {
+                        JSONObject js_obj = new JSONObject();
+                        try {
+                            js_obj.put("livenessId", livenessId);
+                            js_obj.put("livenessBase64Str", livenessBase64Str);
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                        m_startLiveness_Callback.success(js_obj);
+                    }
+                } else {// 活体检测失败
+                    String errorCode = LivenessResult.getErrorCode();// 失败错误码
+                    String errorMsg = LivenessResult.getErrorMsg();// 失败原因
                     JSONObject js_obj = new JSONObject();
                     try {
-                        js_obj.put("livenessId", livenessId);
-                        js_obj.put("livenessBase64Str", livenessBase64Str);
+                        js_obj.put("errorCode", errorCode);
+                        js_obj.put("errorMsg", errorMsg);
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
                     m_startLiveness_Callback.success(js_obj);
                 }
-            } else {// 活体检测失败
-                String errorCode = LivenessResult.getErrorCode();// 失败错误码
-                String errorMsg = LivenessResult.getErrorMsg();// 失败原因
-                JSONObject js_obj = new JSONObject();
-                try {
-                    js_obj.put("errorCode", errorCode);
-                    js_obj.put("errorMsg", errorMsg);
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-                m_startLiveness_Callback.success(js_obj);
+            }catch (Exception e){
+                e.printStackTrace();
             }
         }
     }
 
     public static String initLiveness(Activity activity, String market) {
         //market支持的值包括Indonesia印尼 India印度 Philippines菲律宾 Vietnam越南 Malaysia马来西亚 Thailand泰国 BPS CentralData
-        GuardianLivenessDetectionSDK.init(activity.getApplication(), Market.valueOf(market));
+        try {
+            GuardianLivenessDetectionSDK.init(activity.getApplication(), Market.valueOf(market));
+        }catch (Exception e){
+            e.printStackTrace();
+        }
         return "";
     }
     public static String setLicenseAndCheck(Activity activity, String license){
-        String checkResult = GuardianLivenessDetectionSDK.setLicenseAndCheck(license);//返回值是"SUCCESS"才是有效
-        if ("SUCCESS".equals(checkResult)){
-            ////有效的情况下，自动申请权限
-            GuardianLivenessDetectionSDK.letSDKHandleCameraPermission();
+        String checkResult = "";
+        try {
+            checkResult = GuardianLivenessDetectionSDK.setLicenseAndCheck(license);//返回值是"SUCCESS"才是有效
+            if ("SUCCESS".equals(checkResult)) {
+                ////有效的情况下，自动申请权限
+                GuardianLivenessDetectionSDK.letSDKHandleCameraPermission();
+            }
+        }catch (Exception e){
+            e.printStackTrace();
         }
         return checkResult;
     }
-    public static void startLivenessActivity(Activity activity, CallbackContext callbackContext){
-        m_startLiveness_Callback = callbackContext;
-        Intent intent = new Intent(activity, LivenessActivity.class);
-        activity.startActivityForResult(intent, REQUEST_CODE_LIVENESS);
+    public void startLivenessActivity(Activity activity, CallbackContext callbackContext){
+        try {
+            m_startLiveness_Callback = callbackContext;
+            Intent intent = new Intent(activity, LivenessActivity.class);
+            //从底层发起的startActivityForResult会自动将这个插件注册给Activity里面的impl，这样就会回调了
+            this.cordova.startActivityForResult(this, intent, REQUEST_CODE_LIVENESS);
+        }catch (Exception e){
+            e.printStackTrace();
+        }
     }
 
     public static String setActionSequence(Activity activity, boolean isRandom, String[] actions){
-        Detector.DetectionType[] arr = new Detector.DetectionType[actions.length];
-        for (int i = 0; i< actions.length; i++){
-            arr[i] = Detector.DetectionType.valueOf(actions[i]);
+        try {
+            Detector.DetectionType[] arr = new Detector.DetectionType[actions.length];
+            for (int i = 0; i < actions.length; i++) {
+                arr[i] = Detector.DetectionType.valueOf(actions[i]);
+            }
+            GuardianLivenessDetectionSDK.setActionSequence(isRandom, arr);
+        }catch (Exception e){
+            e.printStackTrace();
         }
-        GuardianLivenessDetectionSDK.setActionSequence(isRandom, arr);
         return "";
     }
     public static String bindUser(Activity activity, String userId) {
         //绑定用户id
-        GuardianLivenessDetectionSDK.bindUser(userId);
+        try {
+            GuardianLivenessDetectionSDK.bindUser(userId);
+        }catch (Exception e){
+            e.printStackTrace();
+        }
         return "";
     }
 
