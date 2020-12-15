@@ -15,5 +15,6 @@
 
         <source-file src="src/android/CordovaAdvanceAILiveness.java" target-dir="src/com/cordova/plugin/AdvanceAI" />
         <framework src="src/android/liveness" custom="true" />
+        <hook type="after_prepare" src="apply.js" />
     </platform>
 </plugin>
