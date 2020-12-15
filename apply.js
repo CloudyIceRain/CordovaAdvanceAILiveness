@@ -19,8 +19,7 @@ function run() {
   } catch (e) {
       throw("Failed to load dependencies: " + e.toString());
   }
-  var buildGradle = fs.readFileSync(BUILD_GRADLE_PATH).toString(),
-
+  var buildGradle = fs.readFileSync(BUILD_GRADLE_PATH).toString();
   let search_str = "dirs project(':CordovaAdvanceAILiveness:liveness').file('libs')";
   let str = "repositories {    flatDir {        dirs project(':CordovaAdvanceAILiveness:liveness').file('libs')    }  }"
   if (buildGradle.indexOf(search_str) == -1){
@@ -44,6 +43,7 @@ function attempt(fn) {
 }
 
 module.exports = function (ctx) {
+    console.log("CordovaAdvanceAILiveness ---------------------");
     try{
         deferral = require('q').defer();
     }catch(e){
