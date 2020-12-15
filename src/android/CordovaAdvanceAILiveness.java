@@ -3,13 +3,9 @@ package com.cordova.plugin.AdvanceAI;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Bitmap;
 import android.util.Log;
 
-import com.huofeng.kabayan.MainActivity;
-
 import org.apache.cordova.CallbackContext;
-import org.apache.cordova.CordovaActivity;
 import org.apache.cordova.CordovaArgs;
 import org.apache.cordova.CordovaPlugin;
 import org.json.JSONArray;
@@ -29,11 +25,6 @@ public class CordovaAdvanceAILiveness extends CordovaPlugin {
     public static final int REQUEST_CODE_LIVENESS = 1422114;    //advan 1 4 22 1 14
     public static CallbackContext m_startLiveness_Callback = null;
 
-//    public static CordovaAdvanceAILiveness instance = null;
-//    public static CordovaAdvanceAILiveness getInstance(){
-//        if (null == instance) instance = new CordovaAdvanceAILiveness();
-//        return instance;
-//    }
     /**
      * 获取检测结果
      */
