@@ -1,3 +1,4 @@
+var PLUGIN_NAME = "CordovaAdvanceAILiveness";
 var BUILD_GRADLE_PATH = "./platforms/android/app/build.gradle";
 
 var deferral, fs, path;
