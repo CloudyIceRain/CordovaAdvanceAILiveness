@@ -21,8 +21,5 @@
   "bugs": {
     "url": "https://github.com/CloudyIceRain/CordovaAdvanceAILiveness/issues"
   },
-  "dependencies": {
-    "q": "^1.5.1",
-  },
   "homepage": "https://github.com/CloudyIceRain/CordovaAdvanceAILiveness#readme"
 }
